@@ -128,8 +128,6 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             _value = element;
             _size = 1;
             _height = 1;
-            _left = new assn06.AVLTree<>(); // Initialize left child
-            _right = new assn06.AVLTree<>(); // Initialize right child
         } else {
             if ((element.compareTo(_value) < 0) && (_left != null && !_left.isEmpty())) {
                 _left = (assn06.AVLTree<T>) _left.insert(element);
