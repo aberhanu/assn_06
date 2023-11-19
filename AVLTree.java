@@ -23,7 +23,7 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     private assn06.AVLTree<T> rotateLeft() {
         // You should implement left rotation and then use this
         // method as needed when fixing imbalances.
-        // TODO
+        //
         assn06.AVLTree<T> old_root = this;
         assn06.AVLTree<T> new_root = _right;
 
@@ -69,7 +69,7 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     private assn06.AVLTree<T> rotateRight() {
         // You should implement right rotation and then use this
         // method as needed when fixing imbalances.
-        // TODO
+        //
         assn06.AVLTree<T> old_root = this;
         assn06.AVLTree<T> new_root = _left;
 
@@ -124,24 +124,24 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public SelfBalancingBST<T> insert(T element) {
         // TODO
-        assn06.AVLTree<T> result = this;
         if (this.isEmpty()) {
             _value = element;
             _size = 1;
             _height = 1;
+            _left = new assn06.AVLTree<>(); // Initialize left child
+            _right = new assn06.AVLTree<>(); // Initialize right child
         } else {
-            if((element.compareTo(_value) < 0) && (_left != null )){
+            if ((element.compareTo(_value) < 0) && (_left != null && !_left.isEmpty())) {
                 _left = (assn06.AVLTree<T>) _left.insert(element);
-            } else if (((element.compareTo(_value) >= 0)) && (_right != null)) {
+            } else if ((element.compareTo(_value) >= 0) && (_right != null && !_right.isEmpty())) {
                 _right = (assn06.AVLTree<T>) _right.insert(element);
-            } else if ((element.compareTo(_value) < 0) && ((_left == null))) {
+            } else if ((element.compareTo(_value) < 0) && ((_left == null) || _left.isEmpty())) {
                 assn06.AVLTree<T> insertion = new assn06.AVLTree<T>();
                 insertion._value = element;
                 insertion._height = 1;
                 insertion._size = 1;
                 _left = insertion;
-
-            } else if (((element.compareTo(_value) >= 0)) && ((_right == null))) {
+            } else if ((element.compareTo(_value) >= 0) && ((_right == null) || _right.isEmpty())) {
                 assn06.AVLTree<T> insertion = new assn06.AVLTree<T>();
                 insertion._value = element;
                 insertion._height = 1;
@@ -150,10 +150,9 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             }
 
             _size += 1;
-            if (_size > (Math.pow(2,_height) - 1)) {
+            if (_size > (Math.pow(2, _height) - 1)) {
                 _height += 1;
             }
-
 
             int left_height = 0;
             int right_height = 0;
@@ -196,9 +195,9 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                 }
             }
 
+            assn06.AVLTree<T> smthn = new assn06.AVLTree<T>();
+            smthn = this;
             if(left_height - right_height > 1){
-                assn06.AVLTree<T> smthn = new assn06.AVLTree<T>();
-                smthn = this;
                 if(left_child_left_height - left_child_right_height >= 1){
                     smthn = rotateRight();
                 } else {
@@ -207,22 +206,17 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                     }
                     smthn = rotateRight();
                 }
-                return smthn;
 
 
             } else {
-                assn06.AVLTree<T> smthn = new assn06.AVLTree<T>();
-                smthn = this;
-                if (right_child_right_height - right_child_left_height >= 1) {
-                    smthn = rotateLeft();
-                } else {
-                    if(_right != null){
+                if (right_child_right_height - right_child_left_height < 1) {
+                    if (_right != null) {
                         _right = _right.rotateRight();
                     }
-                    smthn = rotateLeft();
                 }
-                return smthn;
+                smthn = rotateLeft();
             }
+            return smthn;
         }
         return this;
     }
@@ -230,10 +224,99 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public SelfBalancingBST<T> remove(T element) {
         // TODO
+        int compare = element.compareTo(_value);
 
 
-        return null;
+        if(compare < 0){
+            _left = (assn06.AVLTree<T>) _left.remove(element);
+        }
+        else if(compare > 0){
+            _right = (assn06.AVLTree<T>) _right.remove(element);
+        }
+        else{
+            if(_left.isEmpty()){
+                return _right;
+            }
+            else if(_right.isEmpty()){
+                return _left;
+            }
+            else{
+                T min = _right.findMin();
+                _value = min;
+                _right = (assn06.AVLTree<T>) _right.remove(min);
+            }
+        }
+
+        _size -= 1;
+        if (_size < (Math.pow(2,_height) - 1)) {
+            _height -= 1;
+        }
+
+        int left_height = 0;
+        int right_height = 0;
+        if (_left != null) {
+            left_height = _left.height();
+        }
+        if (_right != null){
+            right_height = _right.height();
+        }
+
+        if((Math.abs(left_height-right_height)) <= 1){
+            return this;
+        }
+
+        assn06.AVLTree<T> left_child = _left;
+        assn06.AVLTree<T> right_child = _right;
+
+        int left_child_left_height = 0;
+        int left_child_right_height = 0;
+        int right_child_left_height = 0;
+        int right_child_right_height = 0;
+
+        if(left_child != null) {
+            if(left_child._left != null){
+                left_child_left_height = left_child._left.height();
+            }
+
+            if(left_child._right != null){
+                left_child_right_height = left_child._right.height();
+            }
+
+        }
+        if(right_child != null){
+
+            if(right_child._left != null){
+                right_child_left_height = right_child._left.height();
+            }
+            if(right_child._right != null){
+                right_child_right_height = right_child._right.height();
+            }
+        }
+
+        assn06.AVLTree<T> smthn = new assn06.AVLTree<T>();
+        smthn = this;
+        if(left_height - right_height > 1){
+            if(left_child_left_height - left_child_right_height >= 1){
+                smthn = rotateRight();
+            } else {
+                if(_left != null) {
+                    _left = _left.rotateLeft();
+                }
+                smthn = rotateRight();
+            }
+
+
+        } else {
+            if (right_child_right_height - right_child_left_height < 1) {
+                if (_right != null) {
+                    _right = _right.rotateRight();
+                }
+            }
+            smthn = rotateLeft();
+        }
+        return smthn;
     }
+
 
     @Override
     public T findMin() {
