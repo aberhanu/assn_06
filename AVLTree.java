@@ -28,38 +28,32 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
         assn06.AVLTree<T> new_root = _right;
 
         old_root._right = _right._left;
-        int old_root_right_size = 0;
-        int old_root_left_size = 0;
-        int old_root_right_height = 0;
-        int old_root_left_height = 0;
-
-        if (old_root._right != null) {
-            old_root_right_size = old_root._right.size();
-            old_root_right_height = old_root._right.height();
-        }
-        if(old_root._left != null){
-            old_root_left_size = old_root._left.size();
-            old_root_left_height = old_root._left.height();
-        }
-
-        old_root._size = 1 + old_root_right_size + old_root_left_size;
-        old_root._height = (Math.max(old_root_right_height, old_root_left_height)) + 1;
+        updateSizeAndHeight(old_root);
 
 
         new_root._left = old_root;
-        int new_root_right_size = 0;
-        int new_root_right_height = 0;
-
-        if (new_root._right != null) {
-            new_root_right_size = new_root._right.size();
-            new_root_right_height = new_root._right.height();
-        }
-
-
-        new_root._size = 1 + new_root_right_size + new_root._left.size();
-        new_root._height = (Math.max(new_root_right_height, new_root._left.height())) + 1;
+        updateSizeAndHeight(new_root);
 
         return new_root;
+    }
+
+    private void updateSizeAndHeight(assn06.AVLTree<T> root) {
+        int root_right_size = 0;
+        int root_left_size = 0;
+        int root_right_height = 0;
+        int root_left_height = 0;
+
+        if (!root._right.isEmpty()) {
+            root_right_size = root._right.size();
+            root_right_height = root._right.height();
+        }
+        if(!root._left.isEmpty()){
+            root_left_size = root._left.size();
+            root_left_height = root._left.height();
+        }
+
+        root._size = 1 + root_right_size + root_left_size;
+        root._height = (Math.max(root_right_height, root_left_height)) + 1;
     }
 
     /**
@@ -74,34 +68,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
         assn06.AVLTree<T> new_root = _left;
 
         old_root._left = _left._right;
-        int old_root_right_size = 0;
-        int old_root_left_size = 0;
-        int old_root_right_height = 0;
-        int old_root_left_height = 0;
-
-        if (old_root._right != null) {
-            old_root_right_size = old_root._right.size();
-            old_root_right_height = old_root._right.height();
-        }
-        if(old_root._left != null){
-            old_root_left_size = old_root._left.size();
-            old_root_left_height = old_root._left.height();
-        }
-        old_root._size = 1 + old_root_right_size + old_root_left_size;
-        old_root._height = (Math.max(old_root_right_height, old_root_left_height)) + 1;
+        updateSizeAndHeight(old_root);
 
         new_root._right = old_root;
-        int new_root_left_size = 0;
-        int new_root_left_height = 0;
-
-        if(new_root._left != null){
-            new_root_left_size = new_root._left.size();
-            new_root_left_height = new_root._left.height();
-        }
-
-
-        new_root._size = 1 + new_root._right.size() + new_root_left_size;
-        new_root._height = (Math.max(new_root._right.height(), new_root_left_height)) + 1;
+        updateSizeAndHeight(new_root);
 
         return new_root;
     }
@@ -134,7 +104,7 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             int comparison = element.compareTo(_value);
             if((comparison < 0) && (!_left.isEmpty() )){
                 _left = (assn06.AVLTree<T>) _left.insert(element);
-            } else if (((comparison >= 0)) && (_right.isEmpty())) {
+            } else if (((comparison >= 0)) && (!_right.isEmpty())) {
                 _right = (assn06.AVLTree<T>) _right.insert(element);
             } else if ((comparison < 0) && ((_left.isEmpty()))) {
                 assn06.AVLTree<T> insertion = new assn06.AVLTree<T>();
@@ -155,12 +125,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                 _right = insertion;
             }
 
-            _size += 1;
-            if (_size > (Math.pow(2, _height) - 1)) {
-                _height += 1;
-            }
-
-            return balance();
+            updateSizeAndHeight(this);
+            assn06.AVLTree<T> balanced = new assn06.AVLTree<T>();
+            balanced = (assn06.AVLTree<T>) balance();
+            return balanced;
         }
         return this;
     }
