@@ -202,6 +202,9 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public SelfBalancingBST<T> remove(T element) {
         // TODO
+        if(this.isEmpty()){
+            return this;
+        }
         int compare = element.compareTo(_value);
 
         if(compare < 0){
