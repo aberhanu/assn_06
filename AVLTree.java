@@ -129,9 +129,9 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             _size = 1;
             _height = 1;
         } else {
-            if ((element.compareTo(_value) < 0) && (_left != null))) {
+            if((element.compareTo(_value) < 0) && (_left != null )){
                 _left = (assn06.AVLTree<T>) _left.insert(element);
-            } else if ((element.compareTo(_value) >= 0) && (_right != null)) {
+            } else if (((element.compareTo(_value) >= 0)) && (_right != null)) {
                 _right = (assn06.AVLTree<T>) _right.insert(element);
             } else if ((element.compareTo(_value) < 0) && ((_left == null))) {
                 assn06.AVLTree<T> insertion = new assn06.AVLTree<T>();
@@ -139,7 +139,8 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                 insertion._height = 1;
                 insertion._size = 1;
                 _left = insertion;
-            } else if ((element.compareTo(_value) >= 0) && ((_right == null))) {
+
+            } else if (((element.compareTo(_value) >= 0)) && ((_right == null))) {
                 assn06.AVLTree<T> insertion = new assn06.AVLTree<T>();
                 insertion._value = element;
                 insertion._height = 1;
