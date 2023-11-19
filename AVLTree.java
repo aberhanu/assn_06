@@ -1,7 +1,5 @@
 package assn06;
 
-import assn04.NonEmptyBST;
-
 public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     // Fields
     private T _value;
