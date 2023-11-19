@@ -232,10 +232,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             _right = (assn06.AVLTree<T>) _right.remove(element);
         }
         else{
-            if(_left.isEmpty()){
+            if(_left == null){
                 return _right;
             }
-            else if(_right.isEmpty()){
+            else if(_right == null){
                 return _left;
             }
             else{
