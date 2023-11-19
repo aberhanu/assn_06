@@ -224,12 +224,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             }
         }
 
-        _size -= 1;
-        if (_size < (Math.pow(2,_height) - 1)) {
-            _height -= 1;
-        }
-
-        return balance();
+        updateSizeAndHeight(this);
+        assn06.AVLTree<T> balanced = new assn06.AVLTree<T>();
+        balanced = (assn06.AVLTree<T>) balance();
+        return balanced;
     }
 
 
