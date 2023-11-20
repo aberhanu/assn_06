@@ -178,10 +178,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
         assn06.AVLTree<T> smthn = new assn06.AVLTree<T>();
         smthn = this;
         if(left_height - right_height > 1){
-            if(left_child_left_height - left_child_right_height >= 1){
+            if((left_child_left_height - left_child_right_height) >= 0){
                 smthn = rotateRight();
             } else {
-                if(_left != null) {
+                if(!_left.isEmpty()) {
                     _left = _left.rotateLeft();
                 }
                 smthn = rotateRight();
@@ -189,12 +189,14 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
 
 
         } else {
-            if (right_child_right_height - right_child_left_height < 1) {
-                if (_right != null) {
+            if ((right_child_right_height - right_child_left_height) >= 0) {
+                smthn = rotateLeft();
+            } else {
+                if (!_right.isEmpty() ) {
                     _right = _right.rotateRight();
                 }
+                smthn = rotateLeft();
             }
-            smthn = rotateLeft();
         }
         return smthn;
     }
@@ -206,7 +208,6 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             return this;
         }
         int compare = element.compareTo(_value);
-
         if(compare < 0){
             _left = (assn06.AVLTree<T>) _left.remove(element);
         }
