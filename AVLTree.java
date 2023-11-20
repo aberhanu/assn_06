@@ -262,8 +262,22 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public boolean contains(T element) {
         // TODO
-
-        return false;
+        if(this.isEmpty()){
+            return false;
+        } else {
+            int compare = element.compareTo(_value);
+            if(compare == 0){
+                return true;
+            } else{
+                if((compare < 0) && (!_left.isEmpty())){
+                    return _left.contains(element);
+                } else if ((compare > 0) && (!_right.isEmpty())) {
+                    return _right.contains(element);
+                } else {
+                    return false;
+                }
+            }
+        }
     }
 
     @Override
